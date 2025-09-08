@@ -1,0 +1,19 @@
+{
+  "name": "pwa_server",
+  "version": "1.0.0",
+  "description": "timer pwa server side",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yakushin103/Timer_pwa_server.git"
+  },
+  "author": "Vasso Yakushin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yakushin103/Timer_pwa_server/issues"
+  },
+  "homepage": "https://github.com/Yakushin103/Timer_pwa_server#readme"
+}
