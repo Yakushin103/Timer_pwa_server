@@ -1,14 +1,18 @@
 import { Router } from "express";
 
-import { addTime, getStore } from "../controllers/timer-controllers.js";
+import {
+  addTime,
+  deleteTime,
+  getStore,
+  updatedTime,
+} from "../controllers/timer-controllers.js";
 
 const router = Router();
 //  /api/timer/
 
-router.post("/add", addTime)
+router.post("/add", addTime);
 router.get("/store", getStore);
-// router.get("/store", getStore);
-// router.post("/add", addCompany);
-// router.delete("/delete", deleteCompany);
+router.put("/updated", updatedTime);
+router.delete("/delete", deleteTime);
 
 export default router;

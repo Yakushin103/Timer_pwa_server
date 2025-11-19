@@ -26,18 +26,17 @@ export async function addTime(request, response) {
   }
 }
 
-export async function getStore(request, response) {
+export async function updatedTime(request, response) {
   try {
-    const { date } = request.query;
+    const { seconds, minutes, hours, id } = request.body.params;
 
     const { success, data } = await dbRequestExecution(
-      `SELECT * FROM timer_pwa.timer_list WHERE day = '${date}'`
+      `UPDATE timer_pwa.timer_list SET hours = ${hours}, minutes = ${minutes}, seconds = ${seconds} WHERE id = ${id}`
     );
 
     if (success) {
       response.json({
         success: true,
-        data: data,
       });
     } else {
       response.json({
@@ -46,7 +45,123 @@ export async function getStore(request, response) {
       });
     }
   } catch (error) {
-    console.log("ERROR", error);
+    response.json({
+      success: false,
+      message: error,
+    });
+  }
+}
+
+export async function getStore(request, response) {
+  try {
+    const { date, company_id } = request.query;
+
+    if (date === "all") {
+      let where = "";
+      let total_time = "";
+
+      if (!!company_id) {
+        where = `WHERE company_id = ${company_id}`;
+      }
+      const { success, data } = await dbRequestExecution(
+        `SELECT * FROM timer_pwa.timer_list ${where} ORDER BY 
+        SUBSTRING(day, 7, 4) DESC,
+        SUBSTRING(day, 4, 2) DESC,  
+        SUBSTRING(day, 1, 2) DESC`
+      );
+
+      let total_seconds = 0;
+
+      data.forEach((item) => {
+        total_seconds =
+          Number(total_seconds) +
+          Number(item.seconds) +
+          Number(item.minutes) * 60 +
+          Number(item.hours) * 3600;
+      });
+
+      if (success) {
+        response.json({
+          success: true,
+          data: data,
+          total_time: secondsToHms(total_seconds),
+        });
+      } else {
+        response.json({
+          success: false,
+          message: data,
+          total_time: "",
+        });
+      }
+    } else {
+      const { success, data } = await dbRequestExecution(
+        `SELECT * FROM timer_pwa.timer_list WHERE day = '${date}' ORDER BY 
+        SUBSTRING(day, 7, 4) DESC,
+        SUBSTRING(day, 4, 2) DESC,  
+        SUBSTRING(day, 1, 2) DESC`
+      );
+
+      let total_seconds = 0;
+
+      data.forEach((item) => {
+        total_seconds =
+          Number(total_seconds) +
+          Number(item.seconds) +
+          Number(item.minutes) * 60 +
+          Number(item.hours) * 3600;
+      });
+
+      if (success) {
+        response.json({
+          success: true,
+          data: data,
+          total_time: secondsToHms(total_seconds),
+        });
+      } else {
+        response.json({
+          success: false,
+          message: data,
+          total_time: "",
+        });
+      }
+    }
+  } catch (error) {
+    response.json({
+      success: false,
+      message: error,
+      total_time: "",
+    });
+  }
+}
+
+function secondsToHms(totalSeconds) {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  const pad = (num) => num.toString().padStart(2, "0");
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
+
+export async function deleteTime(request, response) {
+  try {
+    const { id } = request.query;
+
+    const { success, data } = await dbRequestExecution(
+      `DELETE FROM timer_pwa.timer_list WHERE id = ${id}`
+    );
+
+    if (success) {
+      response.json({
+        success: true,
+      });
+    } else {
+      response.json({
+        success: false,
+        message: data,
+      });
+    }
+  } catch (error) {
     response.json({
       success: false,
       message: error,
