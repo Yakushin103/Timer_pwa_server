@@ -4,6 +4,7 @@ import cors from "cors";
 import companyRoutes from "./routes/company.routes.js";
 import currencyRoutes from "./routes/currency.routes.js";
 import paymentMethodRoutes from "./routes/payment_method.routes.js";
+import timerRoutes from "./routes/timer.routes.js";
 
 const app = express()
   .use(cors())
@@ -12,6 +13,7 @@ const app = express()
   .use("/api/company", companyRoutes)
   .use("/api/currency", currencyRoutes)
   .use("/api/payment_method", paymentMethodRoutes)
+  .use("/api/timer", timerRoutes)
 
   .listen(3001, () => {
     console.log("Server runs !!!");
