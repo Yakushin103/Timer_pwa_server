@@ -1,4 +1,5 @@
 import { dbRequestExecution } from "../db/conecctionDB.js";
+import { secondsToHms } from "../utils/funcs.js";
 
 export async function addTime(request, response) {
   try {
@@ -57,12 +58,12 @@ export async function getStore(request, response) {
     const { date, company_id } = request.query;
 
     if (date === "all") {
-      let where = "";
-      let total_time = "";
+      let where = "WHERE is_payout IS NOT TRUE";
 
       if (!!company_id) {
-        where = `WHERE company_id = ${company_id}`;
+        where = `WHERE company_id = ${company_id} AND is_payout IS NOT TRUE`;
       }
+      
       const { success, data } = await dbRequestExecution(
         `SELECT * FROM timer_pwa.timer_list ${where} ORDER BY 
         SUBSTRING(day, 7, 4) DESC,
@@ -95,7 +96,7 @@ export async function getStore(request, response) {
       }
     } else {
       const { success, data } = await dbRequestExecution(
-        `SELECT * FROM timer_pwa.timer_list WHERE day = '${date}' ORDER BY 
+        `SELECT * FROM timer_pwa.timer_list WHERE day = '${date}' AND is_payout IS NOT TRUE ORDER BY 
         SUBSTRING(day, 7, 4) DESC,
         SUBSTRING(day, 4, 2) DESC,  
         SUBSTRING(day, 1, 2) DESC`
@@ -132,15 +133,6 @@ export async function getStore(request, response) {
       total_time: "",
     });
   }
-}
-
-function secondsToHms(totalSeconds) {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-
-  const pad = (num) => num.toString().padStart(2, "0");
-  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
 export async function deleteTime(request, response) {
