@@ -8,16 +8,18 @@ import {
   payReport,
 } from "../controllers/reports-controllers.js";
 
+import { checkToken } from "../utils/funcs.js";
+
 const router = Router();
 //  /api/reports/
 
-router.get("/store", getStore);
-router.get("/settings", getSettings);
+router.get("/store", checkToken, getStore);
+router.get("/settings", checkToken, getSettings);
 
-router.post("/add", addReport);
+router.post("/add", checkToken, addReport);
 
-router.put("/pay", payReport);
+router.put("/pay", checkToken, payReport);
 
-router.delete("/delete", deleteReport);
+router.delete("/delete", checkToken, deleteReport);
 
 export default router;

@@ -7,12 +7,14 @@ import {
   updatedTime,
 } from "../controllers/timer-controllers.js";
 
+import { checkToken } from "../utils/funcs.js";
+
 const router = Router();
 //  /api/timer/
 
-router.post("/add", addTime);
-router.get("/store", getStore);
-router.put("/updated", updatedTime);
-router.delete("/delete", deleteTime);
+router.post("/add", checkToken, addTime);
+router.get("/store", checkToken, getStore);
+router.put("/updated", checkToken, updatedTime);
+router.delete("/delete", checkToken, deleteTime);
 
 export default router;

@@ -7,12 +7,14 @@ import {
   addCurrency,
 } from "../controllers/currency-controllers.js";
 
+import { checkToken } from "../utils/funcs.js";
+
 const router = Router();
 //  /api/currency/
 
-router.get("/store", getStore);
-router.put("/edit", editCurrency);
-router.post("/add", addCurrency);
-router.delete("/delete", deleteCurrency);
+router.get("/store", checkToken, getStore);
+router.put("/edit", checkToken, editCurrency);
+router.post("/add", checkToken, addCurrency);
+router.delete("/delete", checkToken, deleteCurrency);
 
 export default router;

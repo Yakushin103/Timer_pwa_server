@@ -1,7 +1,11 @@
 import moment from "moment";
 
 import { dbRequestExecution } from "../db/conecctionDB.js";
-import { hashPassword } from "../utils/funcs.js";
+import {
+  generateTokenEncrypt,
+  hashPassword,
+  verifyPassword,
+} from "../utils/funcs.js";
 
 export async function getStore(request, response) {
   try {
@@ -68,6 +72,63 @@ export async function addUser(request, response) {
     response.json({
       success: false,
       message: error,
+    });
+  }
+}
+
+export async function singIn(request, response) {
+  try {
+    const { login, password } = request.body.params;
+
+    const { data, success } = await dbRequestExecution(
+      `SELECT * FROM timer_pwa.users WHERE login = '${login}'`
+    );
+
+    if (success && data.length === 1) {
+      let password_hash = data[0].password;
+      let user_id = data[0].id;
+
+      let checkPassword = await verifyPassword(password, password_hash);
+
+      if (checkPassword) {
+        const token = generateTokenEncrypt(
+          JSON.stringify({
+            user_id: user_id,
+          })
+        );
+
+        const { success } = await dbRequestExecution(
+          `INSERT timer_pwa.tokens (token)  VALUES ('${token}')`
+        );
+
+        if (success) {
+          response.json({
+            success: true,
+            token,
+            message: "",
+          });
+        } else {
+          response.json({
+            success: false,
+            message: "Something went wrong, please try again later.",
+          });
+        }
+      } else {
+        response.json({
+          success: false,
+          message: "Incorrect login Or password has been entered",
+        });
+      }
+    } else {
+      response.json({
+        success: false,
+        message: "Incorrect login Or password has been entered",
+      });
+    }
+  } catch (error) {
+    response.json({
+      success: false,
+      message: "CATCH Error",
     });
   }
 }
