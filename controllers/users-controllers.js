@@ -6,7 +6,12 @@ import { hashPassword } from "../utils/funcs.js";
 export async function getStore(request, response) {
   try {
     const { success, data } = await dbRequestExecution(
-      `SELECT created_at, created_by, first_name, id, last_name, login, updated_at, updated_by  FROM timer_pwa.users ORDER BY id`
+      `SELECT tb1.created_at AS created_at, tb1.created_by AS created_by, tb1.first_name AS first_name, \
+        tb1.id AS id, tb1.last_name AS last_name, tb1.login AS login, tb1.updated_at AS updated_at, \
+        tb1.updated_by AS updated_by, tb1.role_id AS role_id, tb2.name AS role \
+          FROM timer_pwa.users AS tb1 \
+        LEFT JOIN timer_pwa.roles as tb2 ON tb1.role_id = tb2.id
+        ORDER BY tb1.id`
     );
 
     if (success) {
