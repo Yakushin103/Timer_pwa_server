@@ -3,7 +3,7 @@ import { dbRequestExecution } from "../db/conecctionDB.js";
 export async function getStore(request, response) {
   try {
     const { data, success } = await dbRequestExecution(
-      `SELECT * FROM timer_pwa.currency_dictionary`
+      `SELECT * FROM u3339950_timer_pwa.currency_dictionary`
     );
 
     if (success) {
@@ -30,7 +30,7 @@ export async function deleteCurrency(request, response) {
     const { id } = request.query;
 
     const { success, data } = await dbRequestExecution(
-      `DELETE FROM timer_pwa.currency_dictionary WHERE id = ${id}`
+      `DELETE FROM u3339950_timer_pwa.currency_dictionary WHERE id = ${id}`
     );
 
     if (success) {
@@ -56,7 +56,7 @@ export async function editCurrency(request, response) {
     const { id, name, short_name } = request.body.params;
 
     const { success, data } = await dbRequestExecution(
-      `UPDATE timer_pwa.currency_dictionary SET name = '${name}', short_name = '${short_name}' WHERE id = ${id}`
+      `UPDATE u3339950_timer_pwa.currency_dictionary SET name = '${name}', short_name = '${short_name}' WHERE id = ${id}`
     );
 
     if (success) {
@@ -82,7 +82,7 @@ export async function addCurrency(request, response) {
     const { name, short_name } = request.body.params;
 
     const { success, data } = await dbRequestExecution(
-      `INSERT timer_pwa.currency_dictionary (name, short_name) VALUES ('${name}', '${short_name}')`
+      `INSERT u3339950_timer_pwa.currency_dictionary (name, short_name) VALUES ('${name}', '${short_name}')`
     );
 
     if (success) {

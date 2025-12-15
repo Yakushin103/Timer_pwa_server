@@ -6,7 +6,7 @@ export async function addTime(request, response) {
     const { day, seconds, minutes, hours, company_id } = request.body.params;
 
     const { success, data } = await dbRequestExecution(
-      `INSERT timer_pwa.timer_list (day, company_id, seconds, minutes, hours) VALUES ('${day}', ${company_id}, ${seconds}, ${minutes}, ${hours})`
+      `INSERT u3339950_timer_pwa.timer_list (day, company_id, seconds, minutes, hours) VALUES ('${day}', ${company_id}, ${seconds}, ${minutes}, ${hours})`
     );
 
     if (success) {
@@ -32,7 +32,7 @@ export async function updatedTime(request, response) {
     const { seconds, minutes, hours, id } = request.body.params;
 
     const { success, data } = await dbRequestExecution(
-      `UPDATE timer_pwa.timer_list SET hours = ${hours}, minutes = ${minutes}, seconds = ${seconds} WHERE id = ${id}`
+      `UPDATE u3339950_timer_pwa.timer_list SET hours = ${hours}, minutes = ${minutes}, seconds = ${seconds} WHERE id = ${id}`
     );
 
     if (success) {
@@ -65,7 +65,7 @@ export async function getStore(request, response) {
       }
       
       const { success, data } = await dbRequestExecution(
-        `SELECT * FROM timer_pwa.timer_list ${where} ORDER BY 
+        `SELECT * FROM u3339950_timer_pwa.timer_list ${where} ORDER BY 
         SUBSTRING(day, 7, 4) DESC,
         SUBSTRING(day, 4, 2) DESC,  
         SUBSTRING(day, 1, 2) DESC`
@@ -96,7 +96,7 @@ export async function getStore(request, response) {
       }
     } else {
       const { success, data } = await dbRequestExecution(
-        `SELECT * FROM timer_pwa.timer_list WHERE day = '${date}' AND is_payout IS NOT TRUE ORDER BY 
+        `SELECT * FROM u3339950_timer_pwa.timer_list WHERE day = '${date}' AND is_payout IS NOT TRUE ORDER BY 
         SUBSTRING(day, 7, 4) DESC,
         SUBSTRING(day, 4, 2) DESC,  
         SUBSTRING(day, 1, 2) DESC`
@@ -140,7 +140,7 @@ export async function deleteTime(request, response) {
     const { id } = request.query;
 
     const { success, data } = await dbRequestExecution(
-      `DELETE FROM timer_pwa.timer_list WHERE id = ${id}`
+      `DELETE FROM u3339950_timer_pwa.timer_list WHERE id = ${id}`
     );
 
     if (success) {

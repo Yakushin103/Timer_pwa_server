@@ -58,7 +58,7 @@ export async function checkToken(request, response, next) {
     if (authHeader && authHeader.startsWith("Bearer ")) {
       token = authHeader.substring(7, authHeader.length);
       if (token) {
-        let sql = `SELECT * FROM timer_pwa.tokens WHERE token = '${token}'`;
+        let sql = `SELECT * FROM u3339950_timer_pwa.tokens WHERE token = '${token}'`;
 
         const findUser = await dbRequestExecution(sql, "users");
 

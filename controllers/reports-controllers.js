@@ -12,12 +12,12 @@ export async function getStore(request, response) {
       `SELECT tb1.company_id AS company_id, tb1.create_date AS create_date, tb1.end_date AS end_date, \
         tb1.id AS id, tb1.is_payout AS is_payout, tb1.payout AS payout, tb1.payout_date AS payout_date, \
         tb1.start_date AS start_date, tb2.name AS company_name
-      FROM timer_pwa.reports AS tb1
-      LEFT JOIN timer_pwa.companies as tb2 ON tb1.company_id = tb2.id`
+      FROM u3339950_timer_pwa.reports AS tb1
+      LEFT JOIN u3339950_timer_pwa.companies as tb2 ON tb1.company_id = tb2.id`
     );
 
     const res = await dbRequestExecution(
-      `SELECT * FROM timer_pwa.timer_list WHERE is_payout IS NOT TRUE ORDER BY 
+      `SELECT * FROM u3339950_timer_pwa.timer_list WHERE is_payout IS NOT TRUE ORDER BY 
       SUBSTRING(day, 7, 4) DESC,
       SUBSTRING(day, 4, 2) DESC,  
       SUBSTRING(day, 1, 2) DESC`
@@ -68,9 +68,9 @@ export async function getSettings(request, response) {
     const getCompany = await dbRequestExecution(`
         SELECT tb1.currency_id AS currency_id, tb1.payment_method_id AS payment_method_id,
         tb1.payout AS payout, tb2.short_name AS currency_short_name, tb3.period AS payment_method_period 
-          FROM timer_pwa.companies as tb1  
-        LEFT JOIN timer_pwa.currency_dictionary as tb2 ON tb1.currency_id = tb2.id
-        LEFT JOIN timer_pwa.payment_method_dictionary as tb3 ON tb1.payment_method_id = tb3.id
+          FROM u3339950_timer_pwa.companies as tb1  
+        LEFT JOIN u3339950_timer_pwa.currency_dictionary as tb2 ON tb1.currency_id = tb2.id
+        LEFT JOIN u3339950_timer_pwa.payment_method_dictionary as tb3 ON tb1.payment_method_id = tb3.id
           WHERE tb1.id = ${company_id}
         `);
 
@@ -94,7 +94,7 @@ export async function getSettings(request, response) {
     }
 
     const { data, success } = await dbRequestExecution(
-      `SELECT * FROM timer_pwa.timer_list ${where} ${order}`
+      `SELECT * FROM u3339950_timer_pwa.timer_list ${where} ${order}`
     );
 
     if (success) {
@@ -175,7 +175,7 @@ export async function addReport(request, response) {
     }
 
     const { success, data } = await dbRequestExecution(
-      `INSERT timer_pwa.reports (create_date, company_id, start_date, end_date, payout, is_payout) \
+      `INSERT u3339950_timer_pwa.reports (create_date, company_id, start_date, end_date, payout, is_payout) \
        VALUES ('${create_date}', ${company_id}, '${moment(
         start_date,
         "YYYY-MM-DD"
@@ -184,7 +184,7 @@ export async function addReport(request, response) {
     );
 
     const res = await dbRequestExecution(
-      `UPDATE timer_pwa.timer_list SET is_payout = ${true} ${where}`
+      `UPDATE u3339950_timer_pwa.timer_list SET is_payout = ${true} ${where}`
     );
 
     if (success) {
@@ -212,12 +212,12 @@ export async function deleteReport(request, response) {
     let where = `WHERE company_id = ${company_id} AND is_payout IS TRUE AND STR_TO_DATE(day, '%d-%m-%Y') BETWEEN STR_TO_DATE('${start_date}', '%d-%m-%Y') AND STR_TO_DATE('${end_date}', '%d-%m-%Y')`;
 
     const res = await dbRequestExecution(
-      `UPDATE timer_pwa.timer_list SET is_payout = ${false} ${where}`
+      `UPDATE u3339950_timer_pwa.timer_list SET is_payout = ${false} ${where}`
     );
 
     if (res.success) {
       const { success, data } = await dbRequestExecution(
-        `DELETE FROM timer_pwa.reports WHERE id = ${id}`
+        `DELETE FROM u3339950_timer_pwa.reports WHERE id = ${id}`
       );
 
       if (success) {
@@ -250,7 +250,7 @@ export async function payReport(request, response) {
     let payout_date = moment().format('DD-MM-YYYY')
 
     const { success, data } = await dbRequestExecution(
-      `UPDATE timer_pwa.reports SET payout_date = '${payout_date}', is_payout = ${true} WHERE id = ${id}`
+      `UPDATE u3339950_timer_pwa.reports SET payout_date = '${payout_date}', is_payout = ${true} WHERE id = ${id}`
     );
 
     if (success) {

@@ -9,9 +9,9 @@ export async function getStore(request, response) {
         tb1.created_by AS created_by, tb1.updated_by AS updated_by,
         tb1.created_at AS created_at, tb2.login AS created_by_name, \
         tb1.updated_at AS updated_at, tb3.login AS updated_by_name
-          FROM timer_pwa.roles AS tb1  \
-        LEFT JOIN timer_pwa.users as tb2 ON tb1.created_by = tb2.id
-        LEFT JOIN timer_pwa.users as tb3 ON tb1.updated_by = tb3.id
+          FROM u3339950_timer_pwa.roles AS tb1  \
+        LEFT JOIN u3339950_timer_pwa.users as tb2 ON tb1.created_by = tb2.id
+        LEFT JOIN u3339950_timer_pwa.users as tb3 ON tb1.updated_by = tb3.id
           ORDER BY tb1.id`
     );
 
@@ -41,7 +41,7 @@ export async function addRole(request, response) {
     let created_at = moment().format("DD-MM-YYYY");
 
     const { success, data } = await dbRequestExecution(
-      `INSERT timer_pwa.roles (name, short_name, created_at, created_by) \
+      `INSERT u3339950_timer_pwa.roles (name, short_name, created_at, created_by) \
          VALUES ('${name}', '${short_name}', '${created_at}', ${
         created_by ? created_by : 1
       })`
@@ -70,7 +70,7 @@ export async function deleteRole(request, response) {
     const { id } = request.query;
 
     const { success, data } = await dbRequestExecution(
-      `DELETE FROM timer_pwa.roles WHERE id = ${id}`
+      `DELETE FROM u3339950_timer_pwa.roles WHERE id = ${id}`
     );
 
     if (success) {
