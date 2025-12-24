@@ -14,7 +14,7 @@ const app = express()
     cors({
       origin: [
         "http://timer.yakushin103.tech:8080",
-        "https://timer.yakushin103.tech:8443",
+        "https://timer.yakushin103.tech",
         "http://localhost:5173",
       ],
       credentials: true,
