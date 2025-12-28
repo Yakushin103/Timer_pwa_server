@@ -98,36 +98,46 @@ export async function getSettings(request, response) {
     );
 
     if (success) {
-      data.forEach((item) => {
-        total_seconds =
-          Number(total_seconds) +
-          Number(item.seconds) +
-          Number(item.minutes) * 60 +
-          Number(item.hours) * 3600;
-      });
+      if (data.length) {
+        data.forEach((item) => {
+          total_seconds =
+            Number(total_seconds) +
+            Number(item.seconds) +
+            Number(item.minutes) * 60 +
+            Number(item.hours) * 3600;
+        });
 
-      min_date = moment(data[data.length - 1].day, "DD-MM-YYYY").format(
-        "YYYY-MM-DD"
-      );
-      max_date = moment(data[0].day, "DD-MM-YYYY").format("YYYY-MM-DD");
+        min_date = moment(data[data.length - 1].day, "DD-MM-YYYY").format(
+          "YYYY-MM-DD"
+        );
+        max_date = moment(data[0].day, "DD-MM-YYYY").format("YYYY-MM-DD");
 
-      if (getCompany.success) {
-        getCompany.data.forEach((item) => {
-          if (item.payment_method_period === "hour") {
-            total_payout = `${calculatePayment(total_seconds, item.payout)} ${
-              item.currency_short_name
-            }`;
-          }
+        if (getCompany.success) {
+          getCompany.data.forEach((item) => {
+            if (item.payment_method_period === "hour") {
+              total_payout = `${calculatePayment(total_seconds, item.payout)} ${
+                item.currency_short_name
+              }`;
+            }
+          });
+        }
+
+        response.json({
+          success: true,
+          min_date: !start_date ? min_date : "",
+          max_date: !start_date ? max_date : "",
+          total_hours: secondsToHms(total_seconds),
+          total_payout,
+        });
+      } else {
+        response.json({
+          success: true,
+          min_date: start_date,
+          max_date: end_date,
+          total_hours: total_seconds,
+          total_payout,
         });
       }
-
-      response.json({
-        success: true,
-        min_date: !start_date ? min_date : "",
-        max_date: !start_date ? max_date : "",
-        total_hours: secondsToHms(total_seconds),
-        total_payout,
-      });
     } else {
       response.json({
         success: false,
@@ -247,7 +257,7 @@ export async function deleteReport(request, response) {
 export async function payReport(request, response) {
   try {
     const { id } = request.body.params;
-    let payout_date = moment().format('DD-MM-YYYY')
+    let payout_date = moment().format("DD-MM-YYYY");
 
     const { success, data } = await dbRequestExecution(
       `UPDATE u3339950_timer_pwa.reports SET payout_date = '${payout_date}', is_payout = ${true} WHERE id = ${id}`

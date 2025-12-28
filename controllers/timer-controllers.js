@@ -63,7 +63,7 @@ export async function getStore(request, response) {
       if (!!company_id) {
         where = `WHERE company_id = ${company_id} AND is_payout IS NOT TRUE`;
       }
-      
+
       const { success, data } = await dbRequestExecution(
         `SELECT * FROM u3339950_timer_pwa.timer_list ${where} ORDER BY 
         SUBSTRING(day, 7, 4) DESC,

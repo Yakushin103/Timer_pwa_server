@@ -10,14 +10,6 @@ const pool = createPool({
   database: process.env.DATABASE,
 });
 
-// const pool = createPool({
-//   user: "u3339950_yakushin103",
-//   host: "31.31.197.6",
-//   port: "3306",
-//   password: "aWuepD8NK!",
-//   database: "u3339950_timer_pwa",
-// });
-
 export async function dbRequestExecution(sql) {
   try {
     const conn = await pool.getConnection();
