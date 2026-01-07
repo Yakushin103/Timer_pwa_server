@@ -1,5 +1,3 @@
-import { Router } from "express";
-
 import {
   addUser,
   deleteUser,
@@ -7,15 +5,11 @@ import {
   singIn,
 } from "../controllers/users-controllers.js";
 
-import { checkToken } from "../utils/funcs.js";
+async function usersRoutes(fastify, options) {
+  fastify.get("/store", getStore);
+  fastify.post("/add", addUser);
+  fastify.post("/sing_in", singIn);
+  fastify.delete("/delete", deleteUser);
+}
 
-const router = Router();
-//  /api/users/
-
-router.post("/add", checkToken, addUser);
-router.post("/sing_in", singIn);
-router.get("/store", checkToken, getStore);
-// router.put("/updated", updatedTime);
-router.delete("/delete", checkToken, deleteUser);
-
-export default router;
+export default usersRoutes;

@@ -7,7 +7,7 @@ import {
   verifyPassword,
 } from "../utils/funcs.js";
 
-export async function getStore(request, response) {
+export async function getStore(request, reply) {
   try {
     const { success, data } = await dbRequestExecution(
       `SELECT tb1.created_at AS created_at, tb1.created_by AS created_by, tb1.first_name AS first_name, \
@@ -19,25 +19,25 @@ export async function getStore(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
         data: data,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function addUser(request, response) {
+export async function addUser(request, reply) {
   try {
     const { first_name, last_name, login, password, role_id } =
       request.body.params;
@@ -47,7 +47,7 @@ export async function addUser(request, response) {
     let getHashPassword = await hashPassword(password);
 
     if (getHashPassword === "Error hashing password") {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: getHashPassword,
       });
@@ -58,25 +58,25 @@ export async function addUser(request, response) {
       );
 
       if (success) {
-        response.json({
+        return {
           success: true,
-        });
+        };
       } else {
-        response.json({
+        return reply.code(400).send({
           success: false,
           message: data,
         });
       }
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function singIn(request, response) {
+export async function singIn(request, reply) {
   try {
     const { login, password } = request.body.params;
 
@@ -102,38 +102,38 @@ export async function singIn(request, response) {
         );
 
         if (success) {
-          response.json({
+          return {
             success: true,
             token,
             message: "",
-          });
+          };
         } else {
-          response.json({
+          return reply.code(500).send({
             success: false,
             message: "Something went wrong, please try again later.",
           });
         }
       } else {
-        response.json({
+        return reply.code(401).send({
           success: false,
           message: "Incorrect login Or password has been entered",
         });
       }
     } else {
-      response.json({
+      return reply.code(401).send({
         success: false,
         message: "Incorrect login Or password has been entered",
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: "CATCH Error",
+      message: "CATCH Error: " + (error.message || error),
     });
   }
 }
 
-export async function deleteUser(request, response) {
+export async function deleteUser(request, reply) {
   try {
     const { id } = request.query;
 
@@ -142,19 +142,19 @@ export async function deleteUser(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }

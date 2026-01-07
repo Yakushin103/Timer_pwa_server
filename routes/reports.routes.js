@@ -1,5 +1,3 @@
-import { Router } from "express";
-
 import {
   addReport,
   deleteReport,
@@ -8,18 +6,12 @@ import {
   payReport,
 } from "../controllers/reports-controllers.js";
 
-import { checkToken } from "../utils/funcs.js";
+async function reportsRoutes(fastify, options) {
+  fastify.get("/store", getStore);
+  fastify.get("/settings", getSettings);
+  fastify.put("/pay", payReport);
+  fastify.post("/add", addReport);
+  fastify.delete("/delete", deleteReport);
+}
 
-const router = Router();
-//  /api/reports/
-
-router.get("/store", checkToken, getStore);
-router.get("/settings", checkToken, getSettings);
-
-router.post("/add", checkToken, addReport);
-
-router.put("/pay", checkToken, payReport);
-
-router.delete("/delete", checkToken, deleteReport);
-
-export default router;
+export default reportsRoutes;

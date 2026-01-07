@@ -19,11 +19,14 @@
   },
   "homepage": "https://github.com/Yakushin103/Timer_pwa_server#readme",
   "dependencies": {
+    "@fastify/cors": "^11.2.0",
+    "@fastify/express": "^4.0.3",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "fastify": "^5.6.2",
     "moment": "^2.30.1",
     "mysql2": "^3.14.5",
     "nodemon": "^3.1.10"

@@ -1,7 +1,7 @@
 import { dbRequestExecution } from "../db/conecctionDB.js";
 import { secondsToHms } from "../utils/funcs.js";
 
-export async function addTime(request, response) {
+export async function addTime(request, reply) {
   try {
     const { day, seconds, minutes, hours, company_id } = request.body.params;
 
@@ -10,24 +10,24 @@ export async function addTime(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function updatedTime(request, response) {
+export async function updatedTime(request, reply) {
   try {
     const { seconds, minutes, hours, id } = request.body.params;
 
@@ -36,24 +36,24 @@ export async function updatedTime(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function getStore(request, response) {
+export async function getStore(request, reply) {
   try {
     const { date, company_id } = request.query;
 
@@ -82,13 +82,13 @@ export async function getStore(request, response) {
       });
 
       if (success) {
-        response.json({
+        return {
           success: true,
           data: data,
           total_time: secondsToHms(total_seconds),
-        });
+        };
       } else {
-        response.json({
+        return reply.code(400).send({
           success: false,
           message: data,
           total_time: "",
@@ -113,13 +113,13 @@ export async function getStore(request, response) {
       });
 
       if (success) {
-        response.json({
+        return {
           success: true,
           data: data,
           total_time: secondsToHms(total_seconds),
-        });
+        };
       } else {
-        response.json({
+        return reply.code(400).send({
           success: false,
           message: data,
           total_time: "",
@@ -127,15 +127,15 @@ export async function getStore(request, response) {
       }
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
       total_time: "",
     });
   }
 }
 
-export async function deleteTime(request, response) {
+export async function deleteTime(request, reply) {
   try {
     const { id } = request.query;
 
@@ -144,19 +144,19 @@ export async function deleteTime(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }

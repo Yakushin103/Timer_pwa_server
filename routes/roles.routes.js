@@ -1,19 +1,13 @@
-import { Router } from "express";
-
 import {
   addRole,
   deleteRole,
   getStore,
 } from "../controllers/roles-controllers.js";
 
-import { checkToken } from "../utils/funcs.js";
+async function rolesRoutes(fastify, options) {
+  fastify.get("/store", getStore);
+  fastify.post("/add", addRole);
+  fastify.delete("/delete", deleteRole);
+}
 
-const router = Router();
-//  /api/roles/
-
-router.post("/add", checkToken, addRole);
-router.get("/store", checkToken, getStore);
-// router.put("/updated", updatedTime);
-router.delete("/delete", checkToken, deleteRole);
-
-export default router;
+export default rolesRoutes;

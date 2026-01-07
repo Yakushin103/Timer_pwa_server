@@ -1,31 +1,31 @@
 import { dbRequestExecution } from "../db/conecctionDB.js";
 
-export async function getStore(request, response) {
+export async function getStore(request, reply) {
   try {
     const { data, success } = await dbRequestExecution(
       `SELECT * FROM u3339950_timer_pwa.payment_method_dictionary`
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
         data: data,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function deletePaymentMethod(request, response) {
+export async function deletePaymentMethod(request, reply) {
   try {
     const { id } = request.query;
 
@@ -34,24 +34,24 @@ export async function deletePaymentMethod(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function editPaymentMethod(request, response) {
+export async function editPaymentMethod(request, reply) {
   try {
     const { id, name, description, period } = request.body.params;
 
@@ -60,24 +60,24 @@ export async function editPaymentMethod(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function addPaymentMethod(request, response) {
+export async function addPaymentMethod(request, reply) {
   try {
     const { name, description, period } = request.body.params;
 
@@ -86,19 +86,19 @@ export async function addPaymentMethod(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }

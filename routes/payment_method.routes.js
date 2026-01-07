@@ -1,5 +1,3 @@
-import { Router } from "express";
-
 import {
   addPaymentMethod,
   deletePaymentMethod,
@@ -7,14 +5,11 @@ import {
   getStore,
 } from "../controllers/payment_method-controllers.js";
 
-import { checkToken } from "../utils/funcs.js";
+async function paymentMethodRoutes(fastify, options) {
+  fastify.get("/store", getStore);
+  fastify.put("/edit", editPaymentMethod);
+  fastify.post("/add", addPaymentMethod);
+  fastify.delete("/delete", deletePaymentMethod);
+}
 
-const router = Router();
-//  /api/payment_method/
-
-router.get("/store", checkToken, getStore);
-router.put("/edit", checkToken, editPaymentMethod);
-router.post("/add", checkToken, addPaymentMethod);
-router.delete("/delete", checkToken, deletePaymentMethod);
-
-export default router;
+export default paymentMethodRoutes;

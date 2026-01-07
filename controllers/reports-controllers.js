@@ -3,7 +3,7 @@ import moment from "moment";
 import { dbRequestExecution } from "../db/conecctionDB.js";
 import { calculatePayment, secondsToHms } from "../utils/funcs.js";
 
-export async function getStore(request, response) {
+export async function getStore(request, reply) {
   try {
     let min_date = "";
     let max_date = "";
@@ -31,14 +31,14 @@ export async function getStore(request, response) {
     }
 
     if (success) {
-      response.json({
+      return {
         success: true,
         data: data,
         min_date,
         max_date,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
         min_date,
@@ -46,14 +46,14 @@ export async function getStore(request, response) {
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function getSettings(request, response) {
+export async function getSettings(request, reply) {
   try {
     const { start_date, end_date, company_id } = request.query;
 
@@ -122,37 +122,37 @@ export async function getSettings(request, response) {
           });
         }
 
-        response.json({
+        return {
           success: true,
           min_date: !start_date ? min_date : "",
           max_date: !start_date ? max_date : "",
           total_hours: secondsToHms(total_seconds),
           total_payout,
-        });
+        };
       } else {
-        response.json({
+        return {
           success: true,
           min_date: start_date,
           max_date: end_date,
           total_hours: total_seconds,
           total_payout,
-        });
+        };
       }
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function addReport(request, response) {
+export async function addReport(request, reply) {
   try {
     const { start_date, end_date, payout, company_id } = request.body.params;
 
@@ -198,24 +198,24 @@ export async function addReport(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function deleteReport(request, response) {
+export async function deleteReport(request, reply) {
   try {
     const { id, company_id, start_date, end_date } = request.query;
 
@@ -231,30 +231,30 @@ export async function deleteReport(request, response) {
       );
 
       if (success) {
-        response.json({
+        return {
           success: true,
-        });
+        };
       } else {
-        response.json({
+        return reply.code(400).send({
           success: false,
           message: data,
         });
       }
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: res.data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function payReport(request, response) {
+export async function payReport(request, reply) {
   try {
     const { id } = request.body.params;
     let payout_date = moment().format("DD-MM-YYYY");
@@ -264,19 +264,19 @@ export async function payReport(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }

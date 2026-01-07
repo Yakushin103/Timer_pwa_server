@@ -1,6 +1,6 @@
 import { dbRequestExecution } from "../db/conecctionDB.js";
 
-export async function getList(request, response) {
+export async function getList(request, reply) {
   try {
     const { data, success } = await dbRequestExecution(
       `SELECT tb1.id as id, tb1.name as name, tb1.short_name as short_name, \
@@ -12,25 +12,25 @@ export async function getList(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
         data: data,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function getStore(request, response) {
+export async function getStore(request, reply) {
   try {
     const getCurrency = await dbRequestExecution(
       `SELECT * FROM u3339950_timer_pwa.currency_dictionary`
@@ -40,22 +40,22 @@ export async function getStore(request, response) {
       `SELECT * FROM u3339950_timer_pwa.payment_method_dictionary`
     );
 
-    response.json({
+    return {
       success: true,
       data: {
         currency_options: getCurrency.success ? getCurrency.data : [],
         payment_method_options: getPM.success ? getPM.data : [],
       },
-    });
+    };
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function addCompany(request, response) {
+export async function addCompany(request, reply) {
   try {
     const { name, short_name, currency_id, payment_method_id } =
       request.body.params;
@@ -65,24 +65,24 @@ export async function addCompany(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function deleteCompany(request, response) {
+export async function deleteCompany(request, reply) {
   try {
     const { id } = request.query;
 
@@ -91,19 +91,19 @@ export async function deleteCompany(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }

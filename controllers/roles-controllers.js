@@ -2,7 +2,7 @@ import moment from "moment";
 
 import { dbRequestExecution } from "../db/conecctionDB.js";
 
-export async function getStore(request, response) {
+export async function getStore(request, reply) {
   try {
     const { success, data } = await dbRequestExecution(
       `SELECT tb1.id AS id, tb1.name AS name, tb1.short_name AS short_name, \
@@ -16,25 +16,25 @@ export async function getStore(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
         data: data,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function addRole(request, response) {
+export async function addRole(request, reply) {
   try {
     const { name, short_name, created_by } = request.body.params;
 
@@ -48,24 +48,24 @@ export async function addRole(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function deleteRole(request, response) {
+export async function deleteRole(request, reply) {
   try {
     const { id } = request.query;
 
@@ -74,19 +74,19 @@ export async function deleteRole(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }

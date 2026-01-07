@@ -1,5 +1,3 @@
-import { Router } from "express";
-
 import {
   addCompany,
   deleteCompany,
@@ -7,14 +5,11 @@ import {
   getStore,
 } from "../controllers/company-controllers.js";
 
-import { checkToken } from "../utils/funcs.js";
+async function companyRoutes(fastify, options) {
+  fastify.get("/list", getList);
+  fastify.get("/store", getStore);
+  fastify.post("/add", addCompany);
+  fastify.delete("/add", deleteCompany);
+}
 
-const router = Router();
-//  /api/company/
-
-router.get("/list", checkToken, getList);
-router.get("/store", checkToken, getStore);
-router.post("/add", checkToken, addCompany);
-router.delete("/delete", checkToken, deleteCompany);
-
-export default router;
+export default companyRoutes;

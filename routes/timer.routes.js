@@ -1,5 +1,3 @@
-import { Router } from "express";
-
 import {
   addTime,
   deleteTime,
@@ -7,14 +5,11 @@ import {
   updatedTime,
 } from "../controllers/timer-controllers.js";
 
-import { checkToken } from "../utils/funcs.js";
+async function timerRoutes(fastify, options) {
+  fastify.get("/store", getStore);
+  fastify.post("/add", addTime);
+  fastify.put("/updated", updatedTime);
+  fastify.delete("/delete", deleteTime);
+}
 
-const router = Router();
-//  /api/timer/
-
-router.post("/add", checkToken, addTime);
-router.get("/store", checkToken, getStore);
-router.put("/updated", checkToken, updatedTime);
-router.delete("/delete", checkToken, deleteTime);
-
-export default router;
+export default timerRoutes;

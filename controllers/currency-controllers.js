@@ -1,31 +1,31 @@
 import { dbRequestExecution } from "../db/conecctionDB.js";
 
-export async function getStore(request, response) {
+export async function getStore(request, reply) {
   try {
     const { data, success } = await dbRequestExecution(
       `SELECT * FROM u3339950_timer_pwa.currency_dictionary`
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
         data: data,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function deleteCurrency(request, response) {
+export async function deleteCurrency(request, reply) {
   try {
     const { id } = request.query;
 
@@ -34,24 +34,24 @@ export async function deleteCurrency(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function editCurrency(request, response) {
+export async function editCurrency(request, reply) {
   try {
     const { id, name, short_name } = request.body.params;
 
@@ -60,24 +60,24 @@ export async function editCurrency(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
 
-export async function addCurrency(request, response) {
+export async function addCurrency(request, reply) {
   try {
     const { name, short_name } = request.body.params;
 
@@ -86,19 +86,19 @@ export async function addCurrency(request, response) {
     );
 
     if (success) {
-      response.json({
+      return {
         success: true,
-      });
+      };
     } else {
-      response.json({
+      return reply.code(400).send({
         success: false,
         message: data,
       });
     }
   } catch (error) {
-    response.json({
+    return reply.code(500).send({
       success: false,
-      message: error,
+      message: error.message || error,
     });
   }
 }
